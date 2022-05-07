@@ -1,34 +1,23 @@
 import React from 'react';
 import {useParams} from "react-router-dom";
 import {useQuery} from "react-query";
-import {Product} from "../../types/Product.type";
-import {fetcher, QueryKeys} from "../../queryClient";
+import {graphqlFetcher, QueryKeys} from "../../queryClient";
+import {GET_PRODUCT, Product} from "../../graphql/products";
+import ProductDetail from "../../components/product/detail";
 
-const ProductDetail = () => {
+const ProductDetailPage = () => {
   const {id} = useParams()
-  const {data, isError, isLoading} = useQuery<Product>([QueryKeys.PRODUCTS, id], () => fetcher({
-    path: `/products/${id}`,
-    method: 'GET'
-  }))
+  const {data, isError, isLoading} = useQuery<{ product: Product }>([QueryKeys.PRODUCTS, id], () => graphqlFetcher(GET_PRODUCT, {id}));
+
   if (isLoading || isError || !data){
     return '...loading'
   }
-  const { description, image, price, rating, title, category} = data
-
   return (
-    <div className="product-detail">
-      <p className="product-item__category">
-        {category}
-      </p>
-      <p className="product-item__title">
-        {title}
-      </p>
-      <p className="product-item__description">{description}</p>
-      <img className="product-item__image" alt={title} src={image}></img>
-      <span className="product-item__price">{price}</span>
-      <span className="product-item__rating">{rating.rate}</span>
-    </div>
+    <>
+      <div>상품 상세 화면 </div>
+      <ProductDetail {...data?.product}/>
+    </>
   );
 };
 
-export default ProductDetail
+export default ProductDetailPage
