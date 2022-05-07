@@ -6,6 +6,8 @@ import {reactRouterPlugin} from "vite-plugin-next-react-router";
 export default defineConfig({
   plugins: [
     react(),
-    reactRouterPlugin()
+    reactRouterPlugin({
+      async: true
+    })
   ]
 })
