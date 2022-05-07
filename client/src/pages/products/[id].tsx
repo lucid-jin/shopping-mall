@@ -27,7 +27,6 @@ const ProductDetail = () => {
       <img className="product-item__image" alt={title} src={image}></img>
       <span className="product-item__price">{price}</span>
       <span className="product-item__rating">{rating.rate}</span>
-
     </div>
   );
 };
