@@ -1,8 +1,6 @@
-import {graphql} from 'msw'
-import GET_PRODUCTS, {GET_PRODUCT, Product} from "../graphql/products";
-import {v4 as uuid} from 'uuid'
-
-console.log('here')
+import {graphql} from "msw";
+import {GET_PRODUCT, GET_PRODUCTS, Product} from "../../graphql/products";
+import {v4 as uuid} from "uuid";
 
 const mock_products: Product[] = Array.from({length: 20}).map((_, idx) => ({
   title: 'a',
@@ -13,7 +11,7 @@ const mock_products: Product[] = Array.from({length: 20}).map((_, idx) => ({
   imageUrl: `https://placeimg.com/640/480/${idx + 1}`
 }))
 
-export const handlers = [
+const productHandlers = [
   graphql.query(GET_PRODUCTS, (req, res, context) => {
     return res(
       context.data({
@@ -33,3 +31,5 @@ export const handlers = [
     )
   })
 ]
+
+export default productHandlers;

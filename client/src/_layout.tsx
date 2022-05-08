@@ -1,6 +1,6 @@
 import React, {Suspense} from 'react';
 import {Outlet} from "react-router-dom";
-import Gnb from "./components/cart/layouts/gnb";
+import Gnb from "./components/layouts/gnb";
 
 type Props = {};
 

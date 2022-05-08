@@ -9,7 +9,7 @@ export type Product = {
   createdAt: string
 }
 
-const GET_PRODUCTS = gql`
+export const GET_PRODUCTS = gql`
     query GET_PRODUCTS {
         id
         imageUrl
@@ -30,4 +30,3 @@ export const GET_PRODUCT = gql`
         createAt
     }
 `
-export default GET_PRODUCTS
