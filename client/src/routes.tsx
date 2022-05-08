@@ -5,7 +5,7 @@ const DynamicIndex = React.lazy(() => import('./pages/index'));
 const DynamicProductsIndex = React.lazy(() => import('./pages/products/index'));
 // @ts-ignore
 const DynamicProductsId = React.lazy(() => import('./pages/products/[id]'));
-const DynamicProductsCartIndex = React.lazy(() => import('./pages/products/cart/index'));
+const DynamicProductsCartIndex = React.lazy(() => import('./pages/cart/index'));
 
 
 export const routes = [
@@ -16,7 +16,7 @@ export const routes = [
       { path: '/', element: <DynamicIndex />, index: true},
       { path: '/products', element: <DynamicProductsIndex />, index: true},
       { path: '/products/:id', element: <DynamicProductsId />, },
-      { path: '/products/cart', element: <DynamicProductsCartIndex />, index: true},
+      { path: '/cart', element: <DynamicProductsCartIndex />, index: true},
     ]
   }
 ]
@@ -25,5 +25,5 @@ export const pages = [
   { route: '/' },
   { route: '/products' },
   { route: '/products/:id' },
-  { route: '/products/cart' },
+  { route: '/cart' },
 ]

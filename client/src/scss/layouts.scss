@@ -1,0 +1,12 @@
+.gnb {
+  height: 5rem;
+  display: flex;
+  justify-content: flex-start;
+  align-content: center;
+
+  ul {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+  }
+}
