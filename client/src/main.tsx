@@ -7,7 +7,9 @@ import {worker} from './mocks/browser'
 import {RecoilRoot} from "recoil";
 
 if (import.meta.env.DEV) {
-  worker.start().catch(e => console.log(e, 'worker start error'))
+  worker.start({
+    onUnhandledRequest: "bypass",
+  }).catch(e => console.log(e, 'worker start error'))
 }
 
 

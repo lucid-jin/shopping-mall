@@ -23,8 +23,7 @@ export const getClient = (() => {
   }
 })();
 
-const BASE_URL = 'https://fakestoreapi.com'
-
+const BASE_URL = 'https://fakestoreapi.com';
 
 export const restFetcher = async ({path, method, body, params}: {
   path: string,
@@ -52,5 +51,6 @@ export const graphqlFetcher = (query: RequestDocument, variables = {}) => reques
 
 
 export const QueryKeys = {
-  PRODUCTS: 'PRODUCTS'
+  PRODUCTS: 'PRODUCTS',
+  CARTS: 'CARTS'
 }
