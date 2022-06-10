@@ -1,7 +1,7 @@
 import {graphql} from "msw";
 import {mockProducts} from "./products.handler";
 import {Product} from "../../graphql/products";
-import {ADD_CART, GET_CARTS, UPDATE_CART} from "../../graphql/cart";
+import {ADD_CART, DELETE_CART, GET_CARTS, UPDATE_CART} from "../../graphql/cart";
 
 
 export type Cart = Product & { amount: number }
@@ -60,6 +60,30 @@ const cartHandler = [
       context.status(200),
       context.data({
         carts: carts
+      })
+    )
+
+  }),
+
+  graphql.mutation(DELETE_CART, (req,res,context) => {
+    console.log({
+      'server Carts': carts
+    })
+
+    if (!carts.hasOwnProperty(req.variables.id)){
+      return res(
+        context.status(400),
+        context.data({
+          message: 'not found cart item'
+        })
+      )
+    }
+    delete carts[req.variables.id];
+    
+    return res(
+      context.status(200),
+      context.data({
+        carts
       })
     )
 
