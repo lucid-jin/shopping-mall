@@ -1,24 +1,23 @@
-import React, {ChangeEvent} from 'react';
+import React, {ChangeEvent, ForwardedRef} from 'react';
 import {Cart} from "../../mocks/handlers/cart.handler";
 import {useMutation} from "react-query";
 import {getClient, graphqlFetcher, QueryKeys} from "../../queryClient";
 import {DELETE_CART, UPDATE_CART} from "../../graphql/cart";
 
-type Props = {};
+type Props = {
+  
+};
 
-const CartItem = ({title, amount, id, imageUrl, price}: Cart) => {
+const CartItem = ({title, amount, id, imageUrl, price}: Cart, ref: ForwardedRef<HTMLInputElement> ) => {
   const queryClient = getClient();
-  const {mutate: updateCart} = useMutation(({
-                                                         id,
-                                                         amount
-                                                       }: { id: string, amount: number }) => graphqlFetcher(UPDATE_CART, {
+  const {mutate: updateCart} = useMutation(({id, amount}) => graphqlFetcher(UPDATE_CART, {
     id,
     amount
   }), {
     onMutate,
     onSuccess
   })
-  const { mutate: deleteCart } = useMutation(({id}: {id: string}) => graphqlFetcher(DELETE_CART, {id}))
+  const {mutate: deleteCart} = useMutation(({id}: { id: string }) => graphqlFetcher(DELETE_CART, {id}))
 
   // 낙관적 업데이트
   async function onMutate({id, amount}: { id: string, amount: number }) {
@@ -51,7 +50,12 @@ const CartItem = ({title, amount, id, imageUrl, price}: Cart) => {
   }
 
 
-  const handleAmount = (e: ChangeEvent<HTMLInputElement>) => updateCart({id, amount: +e.target.value});
+  const handleAmount = ({target: {value}}: ChangeEvent<HTMLInputElement>) => {
+    const amount = +value;
+    if (amount < 1) return;
+
+    updateCart({id, amount})
+  };
   // item 하나에 대한 데이터 처리를 전부다 리액트 쿼리가 가지고 잇는거에서 업데이트를 하니까 반영이되서 좋다
   const handleDeleteItem = () => deleteCart({id}, {
     onSuccess: ({carts}) => {
@@ -62,6 +66,9 @@ const CartItem = ({title, amount, id, imageUrl, price}: Cart) => {
   });
 
   return <li className='cart-item'>
+    <label htmlFor={`select-${id}`}  >
+      <input type="checkbox" ref={ref} className='cart-item__checkbox' name={`select-${id}`}/>
+    </label>
     <img src={imageUrl} className='cart_item__image' alt={title}/>
     <p className='cart-item__price'>{price}</p>
     <p className="cart-item__title">{title}</p>
@@ -73,4 +80,4 @@ const CartItem = ({title, amount, id, imageUrl, price}: Cart) => {
   </li>
 };
 
-export default CartItem
+export default React.forwardRef(CartItem)
