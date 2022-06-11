@@ -1,12 +1,14 @@
-import React, {ChangeEvent, ForwardedRef} from 'react';
+import React, {ChangeEvent, ForwardedRef, SyntheticEvent} from 'react';
 import {Cart} from "../../mocks/handlers/cart.handler";
 import {useMutation} from "react-query";
 import {getClient, graphqlFetcher, QueryKeys} from "../../queryClient";
 import {DELETE_CART, UPDATE_CART} from "../../graphql/cart";
+import ItemData from "./itemData";
 
 type Props = {
   
 };
+
 
 const CartItem = ({title, amount, id, imageUrl, price}: Cart, ref: ForwardedRef<HTMLInputElement> ) => {
   const queryClient = getClient();
@@ -57,21 +59,27 @@ const CartItem = ({title, amount, id, imageUrl, price}: Cart, ref: ForwardedRef<
     updateCart({id, amount})
   };
   // item 하나에 대한 데이터 처리를 전부다 리액트 쿼리가 가지고 잇는거에서 업데이트를 하니까 반영이되서 좋다
-  const handleDeleteItem = () => deleteCart({id}, {
-    onSuccess: ({carts}) => {
-      queryClient.setQueryData(QueryKeys.CARTS, {    // 리덕스와 같은 느낌임
-        carts
-      })
-    }
-  });
+  const handleDeleteItem = (e: SyntheticEvent) => {
+    e.preventDefault();
+    
+    deleteCart({id}, {
+      onSuccess: ({carts}) => {
+        console.log(
+          'success delete case',
+          queryClient.getQueryData(QueryKeys.CARTS)
+        )
+        queryClient.setQueryData(QueryKeys.CARTS, {    // 리덕스와 같은 느낌임
+          carts
+        })
+      }
+    });
+  }
 
   return <li className='cart-item'>
     <label htmlFor={`select-${id}`}  >
       <input type="checkbox" ref={ref} className='cart-item__checkbox' name={`select-${id}`}/>
     </label>
-    <img src={imageUrl} className='cart_item__image' alt={title}/>
-    <p className='cart-item__price'>{price}</p>
-    <p className="cart-item__title">{title}</p>
+    <ItemData title={title} imageUrl={imageUrl} key={id} price={price}></ItemData>
     <input className='cart-item__amount'
            type="number"
            value={amount} onChange={handleAmount}
